@@ -1,26 +1,19 @@
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForQuestionAnswering, AutoTokenizer, pipeline
+
+# Загрузка модели и токенизатора
+model_name = "deepset/roberta-base-squad2"
+model = AutoModelForQuestionAnswering.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+# Создание объекта pipeline для вопросно-ответного задания
+nlp = pipeline('question-answering', model=model, tokenizer=tokenizer)
 
 
-class AIModel:
-    def __init__(self):
-        if torch.cuda.is_available():
-            self.device = torch.device("cuda")
-        else:
-            self.device = torch.device("cpu")
-
-        self.model = AutoModelForCausalLM.from_pretrained(
-            "microsoft/phi-2",
-            torch_dtype="auto",
-            trust_remote_code=True
-        ).to(self.device)
-
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            "microsoft/phi-2",
-            trust_remote_code=True
-        )
-
-    def generate_response(self, input_text):
-        inputs = self.tokenizer(input_text, return_tensors="pt", return_attention_mask=False).to(self.device)
-        outputs = self.model.generate(**inputs, max_length=200)
-        return self.tokenizer.batch_decode(outputs)[0]
+# Функция для ответа на вопрос
+def get_answer(question, context):
+    qa_input = {
+        'question': question,
+        'context': context
+    }
+    res = nlp(qa_input)
+    return res

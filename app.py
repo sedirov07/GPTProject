@@ -1,14 +1,16 @@
 import streamlit as st
-from model import AIModel
+from model import get_answer
 
 
-model = AIModel()
+# Отображение интерфейса Streamlit
+st.title("Вопросно-ответный ассистент")
 
-st.title('AI Response Generator')
+question = st.text_input("Введите ваш вопрос:")
+context = st.text_area("Введите контекст:")
 
-user_input = st.text_input("Ask a question:")
-
-if user_input:
-    with st.spinner('Generating response...'):
-        response = model.generate_response(user_input)
-    st.text_area("Response:", response, height=150)
+if st.button("Получить ответ"):
+    if question and context:
+        answer = get_answer(question, context)
+        st.write("Ответ:", answer['answer'].capitalize())
+    else:
+        st.warning("Пожалуйста, введите вопрос и контекст.")
