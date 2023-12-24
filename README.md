@@ -4,7 +4,7 @@
 - Гуляев Николай Алексеевич (РИМ-130906)
 - Седиров Арсен Русланович (РИМ-130906)
 
-**Модель:** deepset/roberta-base-squad2
+**Модель:** deepset/roberta-base-squad2 `https://huggingface.co/deepset/roberta-base-squad2`
 
 
 ## Описание работы модели
